@@ -22,7 +22,7 @@ def importData(path):
     for x in os.walk(path):
         for i in range(60):
             if len(x[2]) > 0:
-                filepaths.append(x[0] + '/' + str(x[2][i])) #filepaths.append(x[0] + '\\' + str(x[2][i]))
+                filepaths.append(x[0] + '\\' + str(x[2][i]))
     activities = []
     subjects = []
     segments = []
@@ -80,9 +80,9 @@ def writeData(formatted):
 
 
 if __name__ == '__main__':
-    path = input("Path of data files:\n")
+    path = r"C:\Users\dakota\Desktop\clustering\ClusteringData\data"
     print('Importing data...')
-    importedData = importData('data') #importedData = importData(path)
+    importedData = importData(path)
     print('Preprocessing data...')
     formatted = formatData(importedData)
     formatted = np.asmatrix(formatted)
