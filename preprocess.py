@@ -40,12 +40,11 @@ def importData(path):
         segments = []        
     return activities
 
-# takes in the file path for the folders of data, gets the array of
-# the all the text file values for each activity, person and segment,
-# then iterates through them and creates a periodogram from the 45
-# different measurements from the 3 sensors for the 5 units on the person
-# being measured, then sends it to pca to be reduced then returned from this
-# function
+# takes in the array of all the text file values for each activity, 
+# person and segment, then iterates through them and creates a 
+# periodogram from the 45 different measurements from the 3 sensors 
+# for the 5 units on the person being measured, then sends it to pca 
+# to be reduced then returned from this function
 def formatData(importedData):
     #x, y, z = importedData.shape
     x = 19
