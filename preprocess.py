@@ -1,10 +1,10 @@
-#Dakota Crowder
-#Henri Thomas
-#Henry Thomas
+# Dakota Crowder
+# Henri Thomas
+# Henry Thomas
 #
-#Mar 25, 2018
+# Mar 25, 2018
 #
-#Dependencies:
+# Dependencies:
 #    python 2.x.x
 #    scikit
 #    numpy
@@ -14,8 +14,9 @@ from scipy.signal import periodogram
 import numpy as np
 import os
 
-#returns a list of list of lists of 2d numpy arrays
-#print activities[6][5][29] #7th activity, 6th person, 30th segment
+
+# eturns a list of list of lists of 2d numpy arrays
+# print activities[6][5][29] #7th activity, 6th person, 30th segment
 def importData(path):
     filepaths = []
     for x in os.walk(path):
@@ -29,7 +30,7 @@ def importData(path):
     for i in range(19):
         for j in range(8):
             for k in range(60):
-                #print('processing file ' + str(counter + 1) + ' of ' + str(len(filepaths)))
+                # print('processing file ' + str(counter + 1) + ' of ' + str(len(filepaths)))
                 data = np.genfromtxt(filepaths[counter], delimiter = ',')
                 counter += 1
                 segments.append(data)
@@ -40,6 +41,7 @@ def importData(path):
         segments = []        
     return activities
 
+
 # takes in the file path for the folders of data, gets the array of
 # the all the text file values for each activity, person and segment,
 # then iterates through them and creates a periodogram from the 45
@@ -47,7 +49,7 @@ def importData(path):
 # being measured, then sends it to pca to be reduced then returned from this
 # function
 def formatData(importedData):
-    #x, y, z = importedData.shape
+    # x, y, z = importedData.shape
     x = 19
     y = 8
     z = 60
@@ -63,19 +65,22 @@ def formatData(importedData):
                 formatted.append(file_psd)
     return formatted
 
-#reduces the data set using PCA 
+
+# reduces the data set using PCA
 def pca(feature_mat):
     clusterPCA = PCA(0.95)
     clusterPCA.fit(feature_mat)
     feature_mat = clusterPCA.transform(feature_mat)
     return feature_mat
 
-#writes data to a csv file
+
+# writes data to a csv file
 def writeData(formatted):
     np.savetxt('formatted.csv', formatted, delimiter = ',')
 
+
 if __name__ == '__main__':
-    path = 'C:\\Users\\Henry\\Desktop\\415\\A4\\ClusteringData\\data\\'
+    path = input("Path of data files:\n")
     print('Importing data...')
     importedData = importData('data') #importedData = importData(path)
     print('Preprocessing data...')
