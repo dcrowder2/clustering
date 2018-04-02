@@ -25,9 +25,11 @@ def random_centroids(array, k):
 def update_centroid(cluster, centroid):
     centroid_mean = []
     if np.size(cluster) is not 0:
-        for i in range(len(centroid)):
+        for i in range(len(cluster[0])):
             if i is not 0:
                 centroid_mean.append((np.sum(cluster[:, i])) / np.size(cluster, 0))
+    else:
+        return centroid
     return centroid_mean
 
 
@@ -79,11 +81,13 @@ def entropy(clusters):
                 else:
                     counts[i, 2] += 1
             else:
-                counts[i, instance[0]] += 1
+
+                counts[i, int(instance[0])] += 1
     p_i_j = np.full((k, k), 1.)
     for cluster in range(k):
         for label in range(k):
-            p_i_j[cluster][label] = ((counts[cluster][label]) / float(len(clusters[cluster]))) + .1  # added the addition of a small number to counteract / 0 error
+            if np.size(clusters[cluster]) is not 0:
+                p_i_j[cluster][label] = ((counts[cluster][label]) / float(len(clusters[cluster]))) + .1
     label_sum = np.sum(p_i_j * np.log2(p_i_j), axis=1)
     return np.sum(c_i_over_m * (-label_sum))
 
@@ -94,11 +98,10 @@ def entropy(clusters):
 # centroids is a 2d array, (cluster, feature)
 def clustering(instances, centroids):
     k = np.size(centroids, 0)
-    print(instances[:, 0])
     clusters = [[] for not_used in range(k)]
     if not cosine:
         for instance in instances:
-            clusters[int(np.argmax(calculate_euclidean_distance(instance[1:], centroids)))].append(instance)
+            clusters[int(np.argmin(calculate_euclidean_distance(instance[1:], centroids)))].append(instance)
     else:
         for instance in instances:
             clusters[int(np.argmax(calculate_cosine_similarity(instance[1:], centroids)))].append(instance)
@@ -108,7 +111,7 @@ def clustering(instances, centroids):
 # takes in two centroid arrays, the old one and the new one, which will see if there is a big enough change to
 # continue the clustering
 def mean_change(old, new):
-    sigma = np.sum(abs(old - new))
+    sigma = abs(np.sum(abs(new) - abs(old)))
     if sigma < .01:  # Arbitrary number, if the old - new is small enough to be consider no change
         return False
     else:
